@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCore - Hospital Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A4D68;
+            --secondary: #05BFDB;
+            --accent: #00FFB9;
+            --dark: #1A1F2E;
+            --light: #F8FFFE;
+            --gray: #6B7280;
+            --success: #10B981;
+            --warning: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(10, 77, 104, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .login-btn, .records-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .login-btn:hover, .records-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(5, 191, 219, 0.3);
+        }
+
+        .records-btn {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 90px;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, rgba(10, 77, 104, 0.05), rgba(5, 191, 219, 0.05));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 255, 185, 0.1), transparent);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, 50px) rotate(180deg); }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            line-height: 1.2;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            animation: slideInLeft 0.8s ease-out 0.2s backwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            animation: slideInLeft 0.8s ease-out 0.4s backwards;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 30px rgba(10, 77, 104, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(5, 191, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero-image {
+            position: relative;
+            animation: slideInRight 0.8s ease-out 0.3s backwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .dashboard-preview {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(10, 77, 104, 0.15);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s;
+        }
+
+        .dashboard-preview:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .preview-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot:nth-child(1) { background: #FF5F57; }
+        .dot:nth-child(2) { background: #FFBD2E; }
+        .dot:nth-child(3) { background: #28CA42; }
+
+        .preview-content {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .preview-stat {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1.5rem;
+            border-radius: 12px;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .preview-stat h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-stat p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Main Content Sections */
+        .main-content {
+            display: block;
+        }
+
+        .main-content.hidden {
+            display: none;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(10, 77, 104, 0.03), rgba(5, 191, 219, 0.03));
+            border-radius: 16px;
+            border: 1px solid rgba(10, 77, 104, 0.1);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(10, 77, 104, 0.15);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Login Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 31, 46, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(107, 114, 128, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--gray);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .login-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .login-sidebar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 3rem;
+            border-radius: 24px 0 0 24px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-sidebar h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-sidebar p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .login-features {
+            list-style: none;
+        }
+
+        .login-features li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .login-features li::before {
+            content: '✓';
+            background: rgba(255, 255, 255, 0.2);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-form-container {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #E5E7EB;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .user-type-btn.active {
+            border-color: var(--primary);
+            background: rgba(10, 77, 104, 0.05);
+            color: var(--primary);
+        }
+
+        .user-type-btn:hover {
+            border-color: var(--secondary);
+        }
+
+        .login-form h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-form p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(5, 191, 219, 0.1);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary);
+        }
+
+        .login-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .login-submit:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(5, 191, 219, 0.3);
+        }
+
+        .signup-link {
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .signup-link a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .signup-link a:hover {
+            color: var(--primary);
+        }
+
+        .error-message {
+            background: #FEE2E2;
+            color: #DC2626;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .success-message {
+            background: #D1FAE5;
+            color: #059669;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: none;
+            padding: 6rem 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .dashboard-container.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #E5E7EB;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dashboard-welcome h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-welcome p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .logout-btn, .appointments-btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            background: #EF4444;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+        }
+
+        .appointments-btn {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .appointments-btn:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(10, 77, 104, 0.1);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-card .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card p {
+            color: var(--gray);
+        }
+
+        /* Records Viewer */
+        .records-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+        }
+
+        .records-container h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .records-table th {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .records-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .records-table tr:hover {
+            background: rgba(10, 77, 104, 0.05);
+        }
+
+        .appointment-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+        }
+
+        .appointment-form h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .appointment-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .appointment-item {
+            background: linear-gradient(135deg, rgba(10, 77, 104, 0.05), rgba(5, 191, 219, 0.05));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .appointment-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .appointment-item p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            padding: 0.875rem 2rem;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-about h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-about p {
+            opacity: 0.8;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-sidebar {
+                border-radius: 24px 24px 0 0;
+                padding: 2rem;
+            }
+
+            .login-sidebar h2 {
+                font-size: 1.8rem;
+            }
+
+            .login-form-container {
+                padding: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .records-table {
+                font-size: 0.85rem;
+            }
+
+            .records-table th, .records-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="goToHome()">
+                <div class="logo-icon">⚕</div>
+                MediCore
+            </div>
+            <ul class="nav-links">
+                <li><a onclick="scrollToSection('home')">Home</a></li>
+                <li><a onclick="scrollToSection('features')">Features</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="records-btn" onclick="openRecordsModal()">📊 View Records</button>
+                <button class="login-btn" onclick="openLoginModal()">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-content" id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>Transform Healthcare Management</h1>
+                    <p>Streamline operations, enhance patient care, and boost efficiency with our comprehensive hospital management system trusted by healthcare providers worldwide.</p>
+                    <div class="cta-buttons">
+                        <button class="btn-primary" onclick="openLoginModal()">Get Started</button>
+                        <button class="btn-secondary" onclick="scrollToSection('features')">Learn More</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="dashboard-preview">
+                        <div class="preview-header">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-stat">
+                                <h3>1,247</h3>
+                                <p>Active Patients Today</p>
+                            </div>
+                            <div class="preview-stat" style="animation-delay: 0.2s;">
+                                <h3>98.5%</h3>
+                                <p>Appointment Efficiency</p>
+                            </div>
+                            <div class="preview-stat" style="animation-delay: 0.4s;">
+                                <h3>24/7</h3>
+                                <p>System Availability</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="section-title">
+                <h2>Powerful Features</h2>
+                <p>Everything you need to manage your healthcare facility efficiently and effectively</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Patient Management</h3>
+                    <p>Comprehensive patient records, medical history tracking, and seamless appointment scheduling all in one place.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analytics & Reporting</h3>
+                    <p>Real-time insights and detailed reports to make data-driven decisions for better healthcare outcomes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💊</div>
+                    <h3>Pharmacy Integration</h3>
+                    <p>Automated prescription management, inventory tracking, and seamless pharmacy operations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Compliant</h3>
+                    <p>HIPAA-compliant data security with encrypted storage and role-based access control.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Smart Scheduling</h3>
+                    <p>AI-powered appointment scheduling that optimizes doctor availability and reduces wait times.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Billing & Insurance</h3>
+                    <p>Streamlined billing processes with insurance claim management and payment tracking.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-container">
+                <div class="footer-about">
+                    <h3>MediCore</h3>
+                    <p>Leading the future of healthcare management with innovative technology solutions designed for modern healthcare facilities.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">f</a>
+                        <a href="#" aria-label="Twitter">𝕏</a>
+                        <a href="#" aria-label="LinkedIn">in</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a onclick="scrollToSection('features')">Features</a></li>
+                        <li><a onclick="openLoginModal()">Request Demo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a onclick="alert('Contact: info@medicore.com')">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a onclick="alert('Help Center: support@medicore.com')">Help Center</a></li>
+                        <li><a onclick="alert('Privacy Policy: We respect your privacy')">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MediCore Hospital Management System. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Login/Signup Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            <div class="login-container">
+                <div class="login-sidebar">
+                    <h2 id="sidebarTitle">Welcome to MediCore</h2>
+                    <p id="sidebarText">Access your personalized healthcare management dashboard with secure authentication.</p>
+                    <ul class="login-features">
+                        <li>Secure & Encrypted Access</li>
+                        <li>24/7 System Availability</li>
+                        <li>Real-time Data Synchronization</li>
+                        <li>HIPAA Compliant Platform</li>
+                    </ul>
+                </div>
+                <div class="login-form-container">
+                    <div class="user-type-selector">
+                        <button class="user-type-btn active" onclick="selectUserType('doctor')">
+                            👨‍⚕️ Doctor
+                        </button>
+                        <button class="user-type-btn" onclick="selectUserType('patient')">
+                            🧑‍🦱 Patient
+                        </button>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <div class="login-form" id="loginFormDiv">
+                        <h3 id="loginTitle">Doctor Login</h3>
+                        <p id="loginSubtitle">Sign in to access your dashboard</p>
+                        
+                        <div class="error-message" id="errorMessage"></div>
+                        <div class="success-message" id="successMessage"></div>
+                        
+                        <form id="loginForm" onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label for="loginUsername">Username</label>
+                                <input type="text" id="loginUsername" name="username" placeholder="Enter your username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Password</label>
+                                <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+                            </div>
+                            <div class="remember-forgot">
+                                <label class="remember-me">
+                                    <input type="checkbox" id="rememberMe">
+                                    <span>Remember me</span>
+                                </label>
+                                <a class="forgot-password" onclick="handleForgotPassword()">Forgot password?</a>
+                            </div>
+                            <button type="submit" class="login-submit">Sign In</button>
+                        </form>
+                        <p class="signup-link">
+                            Don't have an account? <a onclick="showSignupForm()">Sign up</a>
+                        </p>
+                    </div>
+
+                    <!-- Signup Form -->
+                    <div class="login-form" id="signupFormDiv" style="display: none;">
+                        <h3 id="signupTitle">Create Doctor Account</h3>
+                        <p id="signupSubtitle">Register to access the system</p>
+                        
+                        <div class="error-message" id="signupErrorMessage"></div>
+                        <div class="success-message" id="signupSuccessMessage"></div>
+                        
+                        <form id="signupForm" onsubmit="handleSignup(event)">
+                            <div class="form-group">
+                                <label for="signupName">Full Name</label>
+                                <input type="text" id="signupName" name="name" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupUsername">Username</label>
+                                <input type="text" id="signupUsername" name="username" placeholder="Choose a username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupEmail">Email</label>
+                                <input type="email" id="signupEmail" name="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupPassword">Password</label>
+                                <input type="password" id="signupPassword" name="password" placeholder="Create a password" required minlength="6">
+                            </div>
+                            <div class="form-group" id="specialtyGroup">
+                                <label for="signupSpecialty">Specialty (for doctors)</label>
+                                <select id="signupSpecialty" name="specialty">
+                                    <option value="">Select specialty</option>
+                                    <option value="Cardiology">Cardiology</option>
+                                    <option value="Neurology">Neurology</option>
+                                    <option value="Pediatrics">Pediatrics</option>
+                                    <option value="Orthopedics">Orthopedics</option>
+                                    <option value="Dermatology">Dermatology</option>
+                                    <option value="General Medicine">General Medicine</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="login-submit">Create Account</button>
+                        </form>
+                        <p class="signup-link">
+                            Already have an account? <a onclick="showLoginForm()">Sign in</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Records Modal -->
+    <div class="modal-overlay" id="recordsModal">
+        <div class="modal-content" style="max-width: 1200px;">
+            <button class="modal-close" onclick="closeRecordsModal()">&times;</button>
+            <div style="padding: 3rem;">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 2rem;">System Records</h2>
+                
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab('login-records')">Login History</button>
+                    <button class="tab-btn" onclick="switchTab('user-records')">All Users</button>
+                    <button class="tab-btn" onclick="switchTab('activity-records')">Activity Log</button>
+                </div>
+
+                <!-- Login Records Tab -->
+                <div class="tab-content active" id="login-records">
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>User Type</th>
+                                <th>Login Time</th>
+                                <th>User ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loginRecordsBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 2rem;">No login records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- User Records Tab -->
+                <div class="tab-content" id="user-records">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">Registered Doctors</h3>
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Specialty</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctorRecordsBody"></tbody>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin: 2rem 0 1rem;">Registered Patients</h3>
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Total Appointments</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientRecordsBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Activity Log Tab -->
+                <div class="tab-content" id="activity-records">
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>User Type</th>
+                                <th>Action</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityRecordsBody">
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 2rem;">No activity records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="dashboard-container" id="dashboard">
+        <div class="dashboard-header">
+            <div class="dashboard-welcome">
+                <h2 id="dashboardGreeting">Welcome Back!</h2>
+                <p id="dashboardSubtext">Here's what's happening today</p>
+            </div>
+            <div class="dashboard-actions">
+                <button class="appointments-btn" id="appointmentsBtn" onclick="toggleAppointments()">📅 Appointments</button>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid" id="dashboardContent">
+            <!-- Dashboard cards will be dynamically populated -->
+        </div>
+
+        <!-- Appointments Section (for doctors) -->
+        <div class="appointment-form" id="appointmentSection" style="display: none;">
+            <h3>Patient Appointments</h3>
+            <form onsubmit="addAppointment(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="form-group">
+                        <label for="appointmentPatient">Patient Name</label>
+                        <input type="text" id="appointmentPatient" placeholder="Enter patient name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentDate">Date & Time</label>
+                        <input type="datetime-local" id="appointmentDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentReason">Reason for Visit</label>
+                    <input type="text" id="appointmentReason" placeholder="Enter reason" required>
+                </div>
+                <button type="submit" class="login-submit">Add Appointment</button>
+            </form>
+
+            <div class="appointment-list" id="appointmentList">
+                <!-- Appointments will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUserType = 'doctor';
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Initialize system
+        const initializeSystem = () => {
+            if (!localStorage.getItem('users')) {
+                const users = {
+                    doctors: [],
+                    patients: []
+                };
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+        };
+
+        // Initialize on page load
+        initializeSystem();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const sessionData = sessionStorage.getItem('currentUser');
+            if (sessionData) {
+                const user = JSON.parse(sessionData);
+                currentUser = user;
+                showDashboard(user);
+            }
+        });
+
+        // Navigation functions
+        function scrollToSection(sectionId) {
+            if (isLoggedIn) {
+                alert('Please logout to access the main website sections');
+                return;
+            }
+            
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        function goToHome() {
+            if (isLoggedIn) {
+                handleLogout();
+            } else {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Modal functions
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            showLoginForm();
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            clearMessages();
+        }
+
+        function openRecordsModal() {
+            document.getElementById('recordsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            loadRecords();
+        }
+
+        function closeRecordsModal() {
+            document.getElementById('recordsModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Tab switching
+        function switchTab(tabId) {
+            // Remove active from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active to clicked tab
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            
+            // Reload records when switching tabs
+            loadRecords();
+        }
+
+        // User type selection
+        function selectUserType(type) {
+            currentUserType = type;
+            const buttons = document.querySelectorAll('.user-type-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const loginTitle = document.getElementById('loginTitle');
+            const loginSubtitle = document.getElementById('loginSubtitle');
+            const signupTitle = document.getElementById('signupTitle');
+            const signupSubtitle = document.getElementById('signupSubtitle');
+            const specialtyGroup = document.getElementById('specialtyGroup');
+            
+            if (type === 'doctor') {
+                loginTitle.textContent = 'Doctor Login';
+                loginSubtitle.textContent = 'Sign in to access your medical dashboard';
+                signupTitle.textContent = 'Create Doctor Account';
+                signupSubtitle.textContent = 'Register as a new doctor';
+                specialtyGroup.style.display = 'block';
+                document.getElementById('signupSpecialty').required = true;
+            } else {
+                loginTitle.textContent = 'Patient Login';
+                loginSubtitle.textContent = 'Sign in to view your health records';
+                signupTitle.textContent = 'Create Patient Account';
+                signupSubtitle.textContent = 'Register as a new patient';
+                specialtyGroup.style.display = 'none';
+                document.getElementById('signupSpecialty').required = false;
+            }
+            
+            clearMessages();
+        }
+
+        // Show/Hide Forms
+        function showLoginForm() {
+            document.getElementById('loginFormDiv').style.display = 'block';
+            document.getElementById('signupFormDiv').style.display = 'none';
+            document.getElementById('sidebarTitle').textContent = 'Welcome Back';
+            document.getElementById('sidebarText').textContent = 'Sign in to access your personalized healthcare dashboard.';
+            clearMessages();
+        }
+
+        function showSignupForm() {
+            document.getElementById('loginFormDiv').style.display = 'none';
+            document.getElementById('signupFormDiv').style.display = 'block';
+            document.getElementById('sidebarTitle').textContent = 'Join MediCore';
+            document.getElementById('sidebarText').textContent = 'Create your account to start managing healthcare efficiently.';
+            clearMessages();
+        }
+
+        // Handle Login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userList = currentUserType === 'doctor' ? users.doctors : users.patients;
+            
+            const user = userList.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                showSuccess('Login successful! Redirecting to dashboard...');
+                
+                const sessionData = {
+                    ...user,
+                    userType: currentUserType,
+                    loginTime: new Date().toISOString()
+                };
+                
+                if (rememberMe) {
+                    localStorage.setItem('rememberedUser', JSON.stringify(sessionData));
+                }
+                
+                sessionStorage.setItem('currentUser', JSON.stringify(sessionData));
+                currentUser = sessionData;
+                
+                logActivity(user.username, 'login', currentUserType);
+                saveLoginData(sessionData);
+                
+                setTimeout(() => {
+                    closeLoginModal();
+                    showDashboard(sessionData);
+                }, 1500);
+                
+            } else {
+                showError('Invalid username or password. Please try again.');
+            }
+        }
+
+        // Handle Signup
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('signupName').value.trim();
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const specialty = document.getElementById('signupSpecialty').value;
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            
+            // Check if username already exists
+            const allUsers = [...users.doctors, ...users.patients];
+            if (allUsers.find(u => u.username === username)) {
+                showSignupError('Username already exists. Please choose another.');
+                return;
+            }
+            
+            // Generate ID
+            const userList = currentUserType === 'doctor' ? users.doctors : users.patients;
+            const prefix = currentUserType === 'doctor' ? 'DOC' : 'PAT';
+            const id = `${prefix}${String(userList.length + 1).padStart(3, '0')}`;
+            
+            // Create new user
+            const newUser = {
+                id,
+                name,
+                username,
+                email,
+                password,
+                createdAt: new Date().toISOString()
+            };
+            
+            if (currentUserType === 'doctor') {
+                newUser.specialty = specialty || 'General Medicine';
+                newUser.patients = 0;
+                newUser.appointments = 0;
+            } else {
+                newUser.appointments = 0;
+                newUser.lastVisit = 'Not yet visited';
+                newUser.nextAppointment = 'No appointments';
+            }
+            
+            // Save user
+            if (currentUserType === 'doctor') {
+                users.doctors.push(newUser);
+            } else {
+                users.patients.push(newUser);
+            }
+            
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            showSignupSuccess(`Account created successfully! Your ID is: ${id}`);
+            
+            setTimeout(() => {
+                showLoginForm();
+                document.getElementById('loginUsername').value = username;
+            }, 2000);
+        }
+
+        // Save login data
+        function saveLoginData(userData) {
+            let loginHistory = JSON.parse(localStorage.getItem('loginHistory') || '[]');
+            
+            loginHistory.push({
+                username: userData.username,
+                name: userData.name,
+                userType: userData.userType,
+                loginTime: new Date().toISOString(),
+                userId: userData.id
+            });
+            
+            if (loginHistory.length > 50) {
+                loginHistory = loginHistory.slice(-50);
+            }
+            
+            localStorage.setItem('loginHistory', JSON.stringify(loginHistory));
+        }
+
+        // Log activity
+        function logActivity(username, action, userType) {
+            let activityLog = JSON.parse(localStorage.getItem('activityLog') || '[]');
+            
+            activityLog.push({
+                username,
+                userType,
+                action,
+                timestamp: new Date().toISOString()
+            });
+            
+            if (activityLog.length > 100) {
+                activityLog = activityLog.slice(-100);
+            }
+            
+            localStorage.setItem('activityLog', JSON.stringify(activityLog));
+        }
+
+        // Show dashboard
+        function showDashboard(userData) {
+            isLoggedIn = true;
+            
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('active');
+            
+            document.getElementById('dashboardGreeting').textContent = 
+                `Welcome back, ${userData.name}!`;
+            document.getElementById('dashboardSubtext').textContent = 
+                `${userData.userType.charAt(0).toUpperCase() + userData.userType.slice(1)} Dashboard - ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
+            
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            if (userData.userType === 'doctor') {
+                document.getElementById('appointmentsBtn').style.display = 'block';
+                dashboardContent.innerHTML = `
+                    <div class="dashboard-card">
+                        <h3>👥 Total Patients</h3>
+                        <div class="card-value">${userData.patients || 0}</div>
+                        <p>Active patients under your care</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>📅 Total Appointments</h3>
+                        <div class="card-value">${getAppointmentsCount(userData.username)}</div>
+                        <p>Scheduled consultations</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>⚕️ Specialty</h3>
+                        <div class="card-value" style="font-size: 1.5rem;">${userData.specialty}</div>
+                        <p>Your medical specialty</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>🆔 Doctor ID</h3>
+                        <div class="card-value" style="font-size: 1.5rem;">${userData.id}</div>
+                        <p>Your unique identifier</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>📧 Email</h3>
+                        <div class="card-value" style="font-size: 1.2rem;">${userData.email}</div>
+                        <p>Your registered email</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>🕐 Login Time</h3>
+                        <div class="card-value" style="font-size: 1.2rem;">${new Date(userData.loginTime).toLocaleTimeString()}</div>
+                        <p>Current session started</p>
+                    </div>
+                `;
+                loadAppointments();
+            } else {
+                document.getElementById('appointmentsBtn').style.display = 'none';
+                dashboardContent.innerHTML = `
+                    <div class="dashboard-card">
+                        <h3>📋 Medical Records</h3>
+                        <div class="card-value">${userData.appointments || 0}</div>
+                        <p>Total medical appointments</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>📅 Next Appointment</h3>
+                        <div class="card-value" style="font-size: 1.2rem;">${userData.nextAppointment || 'None scheduled'}</div>
+                        <p>Your upcoming consultation</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>🏥 Last Visit</h3>
+                        <div class="card-value" style="font-size: 1.2rem;">${userData.lastVisit || 'No visits yet'}</div>
+                        <p>Most recent hospital visit</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>🆔 Patient ID</h3>
+                        <div class="card-value" style="font-size: 1.5rem;">${userData.id}</div>
+                        <p>Your unique identifier</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>📧 Email</h3>
+                        <div class="card-value" style="font-size: 1.2rem;">${userData.email}</div>
+                        <p>Your registered email</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>🕐 Login Time</h3>
+                        <div class="card-value" style="font-size: 1.2rem;">${new Date(userData.loginTime).toLocaleTimeString()}</div>
+                        <p>Current session started</p>
+                    </div>
+                `;
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Appointments functions
+        function toggleAppointments() {
+            const section = document.getElementById('appointmentSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function addAppointment(event) {
+            event.preventDefault();
+            
+            const patient = document.getElementById('appointmentPatient').value;
+            const date = document.getElementById('appointmentDate').value;
+            const reason = document.getElementById('appointmentReason').value;
+            
+            let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+            
+            const appointment = {
+                id: Date.now(),
+                doctorUsername: currentUser.username,
+                doctorName: currentUser.name,
+                patientName: patient,
+                date: date,
+                reason: reason,
+                createdAt: new Date().toISOString()
+            };
+            
+            appointments.push(appointment);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+            
+            // Reset form
+            event.target.reset();
+            
+            // Reload appointments
+            loadAppointments();
+            
+            alert('Appointment added successfully!');
+        }
+
+        function loadAppointments() {
+            if (!currentUser || currentUser.userType !== 'doctor') return;
+            
+            const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+            const userAppointments = appointments.filter(a => a.doctorUsername === currentUser.username);
+            
+            const listDiv = document.getElementById('appointmentList');
+            
+            if (userAppointments.length === 0) {
+                listDiv.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 2rem;">No appointments scheduled yet.</p>';
+                return;
+            }
+            
+            listDiv.innerHTML = userAppointments.map(apt => `
+                <div class="appointment-item">
+                    <h4>${apt.patientName}</h4>
+                    <p><strong>Date:</strong> ${new Date(apt.date).toLocaleString()}</p>
+                    <p><strong>Reason:</strong> ${apt.reason}</p>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-top: 0.5rem;">
+                        Created: ${new Date(apt.createdAt).toLocaleDateString()}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function getAppointmentsCount(username) {
+            const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+            return appointments.filter(a => a.doctorUsername === username).length;
+        }
+
+        // Load records
+        function loadRecords() {
+            // Load login history
+            const loginHistory = JSON.parse(localStorage.getItem('loginHistory') || '[]');
+            const loginBody = document.getElementById('loginRecordsBody');
+            
+            if (loginHistory.length === 0) {
+                loginBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No login records found</td></tr>';
+            } else {
+                loginBody.innerHTML = loginHistory.reverse().map(record => `
+                    <tr>
+                        <td>${record.username}</td>
+                        <td>${record.name}</td>
+                        <td>${record.userType}</td>
+                        <td>${new Date(record.loginTime).toLocaleString()}</td>
+                        <td>${record.userId}</td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Load all users
+            const users = JSON.parse(localStorage.getItem('users'));
+            const doctorBody = document.getElementById('doctorRecordsBody');
+            const patientBody = document.getElementById('patientRecordsBody');
+            
+            if (users.doctors.length === 0) {
+                doctorBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No doctors registered</td></tr>';
+            } else {
+                doctorBody.innerHTML = users.doctors.map(doc => `
+                    <tr>
+                        <td>${doc.id}</td>
+                        <td>${doc.name}</td>
+                        <td>${doc.username}</td>
+                        <td>${doc.email}</td>
+                        <td>${doc.specialty}</td>
+                    </tr>
+                `).join('');
+            }
+            
+            if (users.patients.length === 0) {
+                patientBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No patients registered</td></tr>';
+            } else {
+                patientBody.innerHTML = users.patients.map(pat => `
+                    <tr>
+                        <td>${pat.id}</td>
+                        <td>${pat.name}</td>
+                        <td>${pat.username}</td>
+                        <td>${pat.email}</td>
+                        <td>${pat.appointments}</td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Load activity log
+            const activityLog = JSON.parse(localStorage.getItem('activityLog') || '[]');
+            const activityBody = document.getElementById('activityRecordsBody');
+            
+            if (activityLog.length === 0) {
+                activityBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">No activity records found</td></tr>';
+            } else {
+                activityBody.innerHTML = activityLog.reverse().map(activity => `
+                    <tr>
+                        <td>${activity.username}</td>
+                        <td>${activity.userType}</td>
+                        <td>${activity.action}</td>
+                        <td>${new Date(activity.timestamp).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            if (currentUser) {
+                logActivity(currentUser.username, 'logout', currentUser.userType);
+            }
+            
+            sessionStorage.removeItem('currentUser');
+            isLoggedIn = false;
+            currentUser = null;
+            
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('appointmentSection').style.display = 'none';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            document.getElementById('loginForm').reset();
+            document.getElementById('signupForm').reset();
+            
+            alert('You have been successfully logged out!');
+        }
+
+        // Message functions
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.classList.add('show');
+            
+            setTimeout(() => {
+                successDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        function showSignupError(message) {
+            const errorDiv = document.getElementById('signupErrorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        function showSignupSuccess(message) {
+            const successDiv = document.getElementById('signupSuccessMessage');
+            successDiv.textContent = message;
+            successDiv.classList.add('show');
+            
+            setTimeout(() => {
+                successDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        function clearMessages() {
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+            document.getElementById('signupErrorMessage').classList.remove('show');
+            document.getElementById('signupSuccessMessage').classList.remove('show');
+        }
+
+        function handleForgotPassword() {
+            alert('Password reset functionality would send a reset link to your registered email address.');
+        }
+
+        // Close modal on outside click
+        document.getElementById('loginModal').addEventListener('click', (e) => {
+            if (e.target.id === 'loginModal') {
+                closeLoginModal();
+            }
+        });
+
+        document.getElementById('recordsModal').addEventListener('click', (e) => {
+            if (e.target.id === 'recordsModal') {
+                closeRecordsModal();
+            }
+        });
+    </script>
+</body>
+</html>
